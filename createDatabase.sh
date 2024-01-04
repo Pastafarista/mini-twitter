@@ -9,7 +9,7 @@ sudo mysql -e "GRANT ALL ON *.* TO 'admin'@'%';"
 sudo mysql -e "flush privileges;"
 
 # Borramos la base de datos si existe y la creamos
-DROP DATABASE Twitter;
+sudo mysql -e "DROP DATABASE Twitter;"
 sudo mysql -e "CREATE DATABASE Twitter;"
 
 # Creamos las tablas
