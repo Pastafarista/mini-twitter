@@ -13,4 +13,4 @@ sudo mysql -e "DROP DATABASE Twitter;"
 sudo mysql -e "CREATE DATABASE Twitter;"
 
 # Creamos las tablas
-sudo mysql -D Twitter -e "CREATE TABLE UserTwitter (userId INT NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY (userId));"
+sudo mysql -D Twitter -e "CREATE TABLE UserTwitter (userId INT NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL PRIMARY KEY, avatar JSON);"
