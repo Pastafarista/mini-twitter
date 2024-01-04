@@ -9,4 +9,4 @@ sudo mysql -e "flush privileges;"
 sudo mysql -e "CREATE DATABASE Twitter;"
 
 # Creamos las tablas
-sudo mysql -D Twitter -e "CREATE TABLE UserTwitter (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY (id));"
+sudo mysql -D Twitter -e "CREATE TABLE UserTwitter (userId INT NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY (userId));"
