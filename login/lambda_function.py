@@ -1,24 +1,25 @@
+# Authors: Antonio Cabrera y Alejandro Gómez
+
 import sys
 import logging
 import pymysql
 import json
 import base64
 import uuid
-
 import crypt
 from datetime import date
 from datetime import timedelta
 from datetime import datetime
 from urllib.parse import parse_qs
 
+# Información de la base de datos
 rds_host = "3.211.121.243"
-
 username = "admin"
-password ="password"
-dbname = "twitter"
+password = "password"
+dbname = "Twitter"
 
 def lambda_handler(event , context):
-    print(json.dumps(event));
+    body = json.dumps(event["body"])
     
     user="err"
     passwordUser="err"
@@ -38,8 +39,8 @@ def lambda_handler(event , context):
             user = decodedEvent["user"][0];
             passwordUser = decodedEvent["passwordUser"][0];
     else:
-        user = event["body"]["user"];
-        passwordUser = event["body"]["passwordUser"]; 
+        user = event["user"];
+        passwordUser = event["passwordUser"]; 
         
     try:
         hashPasswordUser = crypt.crypt(passwordUser,'salt')
@@ -78,16 +79,6 @@ def lambda_handler(event , context):
     return {
         'statusCode': 200,
         'headers': { 'Access-Control-Allow-Origin' : '*' },
-        'body' : json.dumps( { 'res':res , 'msg':msg ,'user':user, 'ssid':ssid, 'userId':userId, 'avatar':avatar} )
+        'body' : json.dumps( { 'res':res , 'msg':msg ,'user':user, 'ssid':ssid, 'userId':userId, 'avatar':avatar})
     }
-
-if __name__ == '__main__':
-    event = {
-        "body": {
-            "user": "user",
-            "passwordUser": "password"
-        }
-    }
-
-    lambda_handler(event, None)
 
