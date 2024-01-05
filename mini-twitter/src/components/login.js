@@ -66,9 +66,14 @@ export default function Login() {
                             <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Contraseña" x-model="password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                         </div>
 
+			{/* Crear cuenta */}
+	    		<div>
+	    			<p className="text-white text-md font-bold"><Link href="/register">Crear cuenta</Link></p>
+	    		</div>
+
 	    		{/* Recuperar contraseña */}
 	    		<div>
-	    			<p className="text-white text-md font-bold"><Link href="/recuperar-contrasena">Recuperar contraseña</Link></p>
+	    			<p className="text-white text-md font-bold"><Link href="/recuperar-contrasena">¿No recuerdas tu contraseña?</Link></p>
 			</div>
 
                         {/* Botón de login */}
