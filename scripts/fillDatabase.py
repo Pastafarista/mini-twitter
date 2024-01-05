@@ -10,11 +10,10 @@ db = "Twitter"
 
 def crearUsuario(cursor, userId, userName, userPassword, avatar):
     # crear el usuario
-    sql = "INSERT INTO UserTwitter (userId, userName, userPassword, avatar) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO UserTwitter (userId, userName, userPassword, failedAttempts, userBlocked, avatar) VALUES (%s, %s, %s, 0, false, %s)"
     cursor.execute(sql, (userId, userName, crypt.crypt(userPassword, 'salt'), avatar))
     # commit para guardar los cambios
     db.commit()
-
 
 # conectar con la base de datos
 db = pymysql.connect(host=host, user=username, password=password, db=db, connect_timeout=10, port=3306)

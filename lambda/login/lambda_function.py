@@ -34,8 +34,9 @@ def lambda_handler(event , context):
     ssid="err"
     userId="err"
     msg="err"
-    res="true"
+    res=True
     avatar="err"
+    blocked="err"
     
     # Recogemos los datos del body
     user = body["user"];
@@ -48,34 +49,59 @@ def lambda_handler(event , context):
         # Conectamos con la base de datos
         conn = pymysql.connect(rds_host, user=username, passwd=password, db=dbname, connect_timeout=10, port=3306)
 
-
         with conn.cursor() as cur:
 
             # Comprobamos si existe el usuario en la base de datos
-            detected = cur.execute("select userId, avatar from UserTwitter where userName='" +user+ "' and userPassword='"+ hashPasswordUser+"'");
+            detected = cur.execute("select userId, avatar, userBlocked from UserTwitter where userName='" + user + "' and userPassword='" + hashPasswordUser + "'");
             rows = cur.fetchall()
             
             # Si existe, generamos un ssid y lo guardamos en la base de datos
             if detected != 0:
                 userId = rows[0][0]
-                avatar = rows[0][1]
-                res = "true"
-                msg = "Logged!"
-                ssid = uuid.uuid4()
-                ssid = str(ssid)
+                blocked = rows[0][2]
                 
-                today = date.today()
-                exdate = str( today + timedelta(days=3))
-                exdate = exdate.split(' ')[0]
+                if(blocked == True):
+                    res = False
+                    msg = "The account is blocked"
+                else:
+                    res = True
+                    msg = "Logged!"
+                    avatar = rows[0][1]
+                    ssid = uuid.uuid4()
+                    ssid = str(ssid)
+                    today = date.today()
+                    exdate = str( today + timedelta(days=3))
+                    exdate = exdate.split(' ')[0]
+                    
+                    cur.execute("UPDATE UserTwitter SET failedAttempts=0 ,userSSID='" + ssid + "' , createSSID='" + str(today) + "' , expiratedSSID='" + exdate + "' WHERE userId ='" + str(userId) + "'");
                 
-                cur.execute("UPDATE UserTwitter SET userSSID='" + ssid + "' , createSSID='" + str(today) + "' , expiratedSSID='" + exdate + "' WHERE userId ='" + str(userId) + "'");
                 conn.commit();
-                
                 cur.close();
             else:
-                res = "false"
+                res = False
                 msg = "Password or UserName Incorrect"
-            
+
+                # Si existe el usuario añadimos un intento fallido
+                detected = cur.execute("SELECT userId, failedAttempts, userBlocked FROM UserTwitter WHERE userName='" + user + "'");
+                rows = cur.fetchall()
+
+                if detected != 0:
+                    userId = rows[0][0]
+                    failedAttempts = rows[0][1]
+                    userBlocked = rows[0][2]
+                    
+                    if userBlocked == True:
+                        msg = "The account is blocked"
+                    elif failedAttempts < 2:
+                        cur.execute("UPDATE UserTwitter SET failedAttempts = failedAttempts + 1 WHERE userId='" + str(userId) + "'");
+                        msg = "Password or UserName Incorrect. Failed Attempts: " + str(failedAttempts + 1)
+                        conn.commit();
+                    else:
+                        # Si el usuario ha fallado 3 veces, bloqueamos la cuenta
+                        msg = "Password or UserName Incorrect. Failed Attempts: " + str(failedAttempts + 1) + ". Account Blocked"
+                        cur.execute("UPDATE UserTwitter SET userBlocked = true WHERE userId ='" + str(userId) + "'");
+                        cur.execute("UPDATE UserTwitter SET failedAttempts=0 WHERE userID = '" + str(userId) + "'")
+                        conn.commit();
             cur.close();
 
     except pymysql.MySQLError as e:    
@@ -88,5 +114,5 @@ def lambda_handler(event , context):
     return {
         'statusCode': 200,
         'headers': { 'Access-Control-Allow-Origin' : '*' },
-        'body' : json.dumps( { 'res':res , 'msg':msg ,'user':user, 'ssid':ssid, 'userId':userId, 'avatar':avatar})
+        'body' : json.dumps( { 'res':res , 'msg':msg , 'user':user, 'ssid':ssid, 'userId':userId, 'userBlocked':blocked ,'avatar':avatar})
     }
