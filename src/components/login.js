@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
+import {Input} from "@nextui-org/react";
 
 export default function Login() {
 
@@ -34,7 +35,7 @@ export default function Login() {
 
     return (
         <section>
-            <div className="w-full bg-blue rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  from-gray-900 to-gray-600 bg-gradient-to-r">
+            <div className="w-full flex flex-col gap-4 border border-white rounded-lg">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 
 		    {/* Error */}
@@ -54,25 +55,21 @@ export default function Login() {
                     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
 			
 
-			{/* Nombre */}
-	    		<div>
-                            <input onChange={(e) => setUser(e.target.value)} type="text" name="user" id="user" placeholder="Nombre de usuario" x-model="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-			</div>
+			{/* Nombre */}    
+	    		<Input onChange={(e) => setUser(e.target.value)} type="text" label="Nombre" variant="underlined" required/>
 
                         {/* Contraseña */}
-                        <div>
-                            <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Contraseña" x-model="password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-                        </div>
+                        <Input onChange={(e) => setPassword(e.target.value)} type="password" label="Contraseña" variant="underlined" required/>
 
 			{/* Crear cuenta */}
-	    		<div>
-	    			<p className="text-white text-md font-bold"><Link href="/register">Crear cuenta</Link></p>
-	    		</div>
+			<div className="flex justify-between">
+                        	<Link href="/register" className="align-start text-md text-white hover:underline">Crear una cuenta</Link>
+                    	</div>
 
 	    		{/* Recuperar contraseña */}
-	    		<div>
-	    			<p className="text-white text-md font-bold"><Link href="/recuperar-contrasena">¿No recuerdas tu contraseña?</Link></p>
-			</div>
+	    		<div className="flex justify-between">
+                        	<Link href="/recuperar-contraseña" className="align-start text-md text-white hover:underline">¿No recuerdas tu contraseña?</Link>
+                    	</div>
 
                         {/* Botón de login */}
                         <button type="submit" className="w-full text-black font-semibold bg-white hover:bg-blue-100 focus:ring-4 focus:outline-none rounded-full text-sm px-5 py-2.5 text-center">Entrar</button>

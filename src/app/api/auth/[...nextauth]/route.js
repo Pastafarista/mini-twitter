@@ -29,12 +29,14 @@ export const authOptions = {
 
 				console.log(data)
 
-				if(data.res == true){
-					return {
-						id: data.userId,
-						name: data.name,
+				if(data.res){
+					const user = {
+						_id: data.userId,
+          					name: data.user,
 						avatar: data.avatar,
 					}
+
+					return user
 				}
 				else if(data.userBlocked == true){
 					throw new Error('El usuario está bloqueado')
@@ -45,10 +47,14 @@ export const authOptions = {
 			}
 		})
 	],
+	session: {
+	    strategy: 'jwt',
+	},
 	pages: {
 		signIn: '/login',
 		error: '/login',
 	},
+	secret: process.env.NEXTAUTH_SECRET,
 }
 
 const handler = NextAuth(authOptions)

@@ -1,26 +1,26 @@
-"use client"
+'use client'
 
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function Component() {	
-
- 	const { data, status } = useSession()
+	
+	const { data: session, status } = useSession()
 	const router = useRouter()
 
-	if (status === "loading") {
-		return <div>Loading...</div>
+	if (status === 'loading') {
+		return <p>Loading...</p>
 	}
 
-	if (status === "unauthenticated") {
-		router.push("/login")
-		return <div>Redirecting...</div>
+	if (status === 'unauthenticated') {
+		router.push('/login')
+		return <p>Redirecting...</p>	
 	}
 
 	return (
-		<section>
-			<h1>Page</h1>
-		</section>
-	)
+		<div className="text-center">
+			<h1 className="text-xl"> Bienvenido {session.user.name}! </h1>
+		</div>
 
+	)
 }
