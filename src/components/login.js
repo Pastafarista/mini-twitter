@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
 
@@ -11,35 +12,22 @@ export default function Login() {
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
 
-    const redirigir = (data) => {
-        console.log(data)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+	
+	const res = await signIn("credentials", {
+		username: user,
+		password: password,
+		callbackUrl: "/user",
+		redirect: false
+	})
 
-	if (data.res == true) {
+	if (res.ok == true) {
 	    router.push("/user")
 	}
-	else if(data.userBlocked == true) {
-	    alert("Usuario bloqueado")
+	else if(res.ok == false) {
+	    alert(res.error)
 	}
-	else {
-	    alert("Usuario o contraseña incorrectos")
-	}
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const usuario = {
-		"user": user,
-		"passwordUser": password
-        }
-
-        fetch("https://81uccrx4el.execute-api.us-east-1.amazonaws.com/default/login", {
-            method: "POST",
-            headers: {},
-            body: JSON.stringify(usuario)
-        })
-           .then((res) => res.json())
-           .then((data) => redirigir(data))
     }
 
     return (

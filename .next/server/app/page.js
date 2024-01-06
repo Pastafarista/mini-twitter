@@ -12,7 +12,7 @@ exports.id = "app/page";
 exports.ids = ["app/page"];
 exports.modules = {
 
-/***/ "./action-async-storage.external":
+/***/ "./action-async-storage.external?9022":
 /*!****************************************************************************!*\
   !*** external "next/dist/client/components/action-async-storage.external" ***!
   \****************************************************************************/
@@ -23,7 +23,7 @@ module.exports = require("next/dist/client/components/action-async-storage.exter
 
 /***/ }),
 
-/***/ "../../client/components/action-async-storage.external":
+/***/ "./action-async-storage.external?8dda":
 /*!*******************************************************************************!*\
   !*** external "next/dist/client/components/action-async-storage.external.js" ***!
   \*******************************************************************************/
@@ -34,7 +34,7 @@ module.exports = require("next/dist/client/components/action-async-storage.exter
 
 /***/ }),
 
-/***/ "./request-async-storage.external":
+/***/ "./request-async-storage.external?93d0":
 /*!*****************************************************************************!*\
   !*** external "next/dist/client/components/request-async-storage.external" ***!
   \*****************************************************************************/
@@ -45,7 +45,7 @@ module.exports = require("next/dist/client/components/request-async-storage.exte
 
 /***/ }),
 
-/***/ "../../client/components/request-async-storage.external":
+/***/ "./request-async-storage.external?3d59":
 /*!********************************************************************************!*\
   !*** external "next/dist/client/components/request-async-storage.external.js" ***!
   \********************************************************************************/
@@ -56,7 +56,7 @@ module.exports = require("next/dist/client/components/request-async-storage.exte
 
 /***/ }),
 
-/***/ "./static-generation-async-storage.external":
+/***/ "./static-generation-async-storage.external?d822":
 /*!***************************************************************************************!*\
   !*** external "next/dist/client/components/static-generation-async-storage.external" ***!
   \***************************************************************************************/
@@ -67,7 +67,7 @@ module.exports = require("next/dist/client/components/static-generation-async-st
 
 /***/ }),
 
-/***/ "../../client/components/static-generation-async-storage.external":
+/***/ "./static-generation-async-storage.external?16bc":
 /*!******************************************************************************************!*\
   !*** external "next/dist/client/components/static-generation-async-storage.external.js" ***!
   \******************************************************************************************/
@@ -153,13 +153,13 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__w
 
 /***/ }),
 
-/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true!":
+/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true!":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true! ***!
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true! ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/components/navbar.js */ \"(ssr)/./src/components/navbar.js\"))//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRm5vZGVfbW9kdWxlcyUyRm5leHQlMkZmb250JTJGZ29vZ2xlJTJGdGFyZ2V0LmNzcyUzRiU3QiUyMnBhdGglMjIlM0ElMjJzcmMlMkZhcHAlMkZsYXlvdXQuanMlMjIlMkMlMjJpbXBvcnQlMjIlM0ElMjJJbnRlciUyMiUyQyUyMmFyZ3VtZW50cyUyMiUzQSU1QiU3QiUyMnN1YnNldHMlMjIlM0ElNUIlMjJsYXRpbiUyMiU1RCU3RCU1RCUyQyUyMnZhcmlhYmxlTmFtZSUyMiUzQSUyMmludGVyJTIyJTdEJm1vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRnNyYyUyRmFwcCUyRmdsb2JhbHMuY3NzJm1vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRnNyYyUyRmNvbXBvbmVudHMlMkZuYXZiYXIuanMmc2VydmVyPXRydWUhIiwibWFwcGluZ3MiOiJBQUFBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbWluaS10d2l0dGVyLz9lODAwIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCgvKiB3ZWJwYWNrTW9kZTogXCJlYWdlclwiICovIFwiL2hvbWUvYW50b25pby9SZXBvcy9taW5pLXR3aXR0ZXIvc3JjL2NvbXBvbmVudHMvbmF2YmFyLmpzXCIpIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true!\n");
+eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/components/navbar.js */ \"(ssr)/./src/components/navbar.js\"))//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRnNyYyUyRmFwcCUyRmdsb2JhbHMuY3NzJm1vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRm5vZGVfbW9kdWxlcyUyRm5leHQlMkZmb250JTJGZ29vZ2xlJTJGdGFyZ2V0LmNzcyUzRiU3QiUyMnBhdGglMjIlM0ElMjJzcmMlMkZhcHAlMkZsYXlvdXQuanMlMjIlMkMlMjJpbXBvcnQlMjIlM0ElMjJJbnRlciUyMiUyQyUyMmFyZ3VtZW50cyUyMiUzQSU1QiU3QiUyMnN1YnNldHMlMjIlM0ElNUIlMjJsYXRpbiUyMiU1RCU3RCU1RCUyQyUyMnZhcmlhYmxlTmFtZSUyMiUzQSUyMmludGVyJTIyJTdEJm1vZHVsZXM9JTJGaG9tZSUyRmFudG9uaW8lMkZSZXBvcyUyRm1pbmktdHdpdHRlciUyRnNyYyUyRmNvbXBvbmVudHMlMkZuYXZiYXIuanMmc2VydmVyPXRydWUhIiwibWFwcGluZ3MiOiJBQUFBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbWluaS10d2l0dGVyLz8yZDdiIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCgvKiB3ZWJwYWNrTW9kZTogXCJlYWdlclwiICovIFwiL2hvbWUvYW50b25pby9SZXBvcy9taW5pLXR3aXR0ZXIvc3JjL2NvbXBvbmVudHMvbmF2YmFyLmpzXCIpIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp%2Fglobals.css&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fnode_modules%2Fnext%2Ffont%2Fgoogle%2Ftarget.css%3F%7B%22path%22%3A%22src%2Fapp%2Flayout.js%22%2C%22import%22%3A%22Inter%22%2C%22arguments%22%3A%5B%7B%22subsets%22%3A%5B%22latin%22%5D%7D%5D%2C%22variableName%22%3A%22inter%22%7D&modules=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fcomponents%2Fnavbar.js&server=true!\n");
 
 /***/ }),
 
@@ -254,7 +254,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/react-icons","vendor-chunks/@swc"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.js&appDir=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc","vendor-chunks/react-icons"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.js&appDir=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter%2Fsrc%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2Fhome%2Fantonio%2FRepos%2Fmini-twitter&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();
