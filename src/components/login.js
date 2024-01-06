@@ -6,18 +6,27 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import {Input} from "@nextui-org/react";
 import { useForm, SubmitHandler } from "react-hook-form"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 export default function Login() {
 
     const router = useRouter()
     const [error, setError] = useState("")
+   
+    const schema = yup.object().shape({
+	name: yup.string().required("El nombre es obligatorio"),
+	password: yup.string().required("La contraseña es obligatoria")
+    })
 
     const {
         register,
         handleSubmit,
 	reset,
         formState: { errors },
-      } = useForm();
+      } = useForm({
+	      resolver: yupResolver(schema)
+      });
 
     const onSubmit = async (data) => {
 	const res = await signIn("credentials", {
@@ -36,17 +45,12 @@ export default function Login() {
 	    reset()
 	}
 
-    };
-
-    const handleSubmite = async (e) => {
-        e.preventDefault();
-	
-    }
+    }; 
 
     return (
         <section>
-            <div className="w-full flex flex-col gap-4 border border-white rounded-lg">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div className="w-full flex flex-col border border-white rounded-lg">
+                <div className="p-6 sm:p-8">
 
 		    {/* Error */} 
 	    	    {error && (
@@ -66,9 +70,11 @@ export default function Login() {
 
 			{/* Nombre */}    
 	    		<Input {...register("name", {required: true})} type="text" label="Nombre" variant="underlined" required/>
+			<p className="text-red-500 text-xs">{errors.name?.message}</p>		
 
                         {/* Contraseña */}
                         <Input {...register("password", {required: true})} type="password" label="Contraseña" variant="underlined" required/>
+			<p className="text-red-500 text-xs">{errors.password?.message}</p>
 
 			{/* Crear cuenta */}
 			<div className="flex justify-between">
@@ -77,7 +83,7 @@ export default function Login() {
 
 	    		{/* Recuperar contraseña */}
 	    		<div className="flex justify-between">
-                        	<Link href="/recuperar-contraseña" className="align-start text-md text-white hover:underline">¿No recuerdas tu contraseña?</Link>
+                        	<Link href="/recuperar-cuenta" className="align-start text-md text-white hover:underline">¿No recuerdas tu contraseña?</Link>
                     	</div>
 
                         {/* Botón de login */}

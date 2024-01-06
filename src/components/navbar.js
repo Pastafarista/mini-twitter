@@ -1,8 +1,15 @@
-import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
-import { FaTwitter} from "react-icons/fa";
+import React from "react"
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react"
+import { FaTwitter} from "react-icons/fa"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-export default function App() {
+export default async function App() {
+
+  const session = await getServerSession(authOptions)
+
+  console.log(session)
+
   return (
     <Navbar>
 

@@ -8,10 +8,10 @@ username = "admin"
 password = "password"
 db = "twitter"
 
-def crearUsuario(cursor, userId, userName, userPassword, avatar):
+def crearUsuario(cursor, userId, userName, userPassword, keyword, avatar):
     # crear el usuario
-    sql = "INSERT INTO users (id, name, password, failedAttempts, blocked, avatar) VALUES (%s, %s, %s, 0, false, %s)"
-    cursor.execute(sql, (userId, userName, crypt.crypt(userPassword, 'salt'), avatar))
+    sql = "INSERT INTO users (id, name, password, failedAttempts, blocked, keyword, avatar) VALUES (%s, %s, %s, 0, false, %s, %s)"
+    cursor.execute(sql, (userId, userName, crypt.crypt(userPassword, 'salt'), keyword, avatar))
 
     # commit para guardar los cambios
     db.commit()
@@ -27,4 +27,4 @@ cursor.execute("TRUNCATE TABLE users")
 
 # rellenar la base de datos usando el método execute()
 
-crearUsuario(cursor, 1, "Antonio", "1234", json.dumps({"name":"Antonio", "surname":"Cabrera", "age": 20, "city": "Madrid", "email":"antonio@gmail.com"}))
+crearUsuario(cursor, 1, "Antonio", "1234", "platano", json.dumps({"name":"Antonio", "surname":"Cabrera", "age": 20, "city": "Madrid", "email":"antonio@gmail.com"}))

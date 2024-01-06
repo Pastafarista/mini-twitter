@@ -6,18 +6,36 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import {Input} from "@nextui-org/react";
 import {useForm, SubmitHandler} from "react-hook-form";
+import * as yup from "yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 
 export default function Register() {
 
     const router = useRouter()
     const [error, setError] = useState("")
 
+    const schema = yup.object().shape({
+	name: yup.string().required("Ingrese su nombre"),
+	password: yup.string()
+	    .required("Ingrese su contraseña")
+	    .min(4, "La contraseña debe tener al menos 4 caracteres")
+	    .max(12, "La contraseña debe tener como máximo 12 caracteres"),
+	confirmPassword: yup.string()
+	    .required("Confirme su contraseña")
+	    .min(4, "La contraseña debe tener al menos 4 caracteres")	
+	    .max(12, "La contraseña debe tener como máximo 12 caracteres")
+	    .oneOf([yup.ref("password")], "Las contraseñas no coinciden"),
+	keyword: yup.string().required("Ingrese su palabra clave")
+    })
+
     const {
 	register,
 	handleSubmit,
 	reset,
 	formState: { errors },
-    } = useForm();
+    } = useForm({
+	resolver: yupResolver(schema),
+    });
    
     const onSubmit = async (data) => {
 	    const usuario = {
@@ -46,8 +64,8 @@ export default function Register() {
 
     return (
         <section>
-            <div className="w-full flex flex-col gap-4 border border-white rounded-lg">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div className="w-full flex flex-col border border-white rounded-lg">
+                <div className="p-6 sm:p-8">
 
 		    {/* Error */} 
 	    	    {error && (
@@ -66,9 +84,19 @@ export default function Register() {
 			
 			{/* Nombre */}
                         <Input {...register("name", {required: true})} type="text" label="Nombre" variant="underlined" required/>
-
+			<p className="text-red-500 text-xs">{errors.name?.message}</p>
+	    
                         {/* Contraseña */}
                         <Input {...register("password", {required:true})} type="password" label="Contraseña" variant="underlined" required/>
+			<p className="text-red-500 text-xs">{errors.password?.message}</p>		
+
+			{/* Confirmar contraseña */}
+	    		<Input {...register("confirmPassword", {required:true})} type="password" label="Confirmar contraseña" variant="underlined" required/>			
+			<p className="text-red-500 text-xs">{errors.confirmPassword?.message}</p>		
+
+	    		{/* Palabra clave */}	
+	    		<Input {...register("keyword", {required:true})} type="password" label="Palabra clave" variant="underlined" required/>
+			<p className="text-red-500 text-xs">{errors.keyword?.message}</p>
 
 			{/* Ya tengo una cuenta */}
 	    		<div className="flex justify-between">
