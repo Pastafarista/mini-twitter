@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 rds_host = "3.211.29.216"
 username = "admin"
 password = "password"
-dbname = "Twitter"
+dbname = "twitter"
 
 def lambda_handler(event , context):
     
@@ -52,7 +52,7 @@ def lambda_handler(event , context):
         with conn.cursor() as cur:
 
             # Comprobamos si existe el usuario en la base de datos
-            detected = cur.execute("select userId, avatar, userBlocked from UserTwitter where userName='" + user + "' and userPassword='" + hashPasswordUser + "'");
+            detected = cur.execute("select id, avatar, blocked from users where name ='" + user + "' and password='" + hashPasswordUser + "'");
             rows = cur.fetchall()
             
             # Si existe, generamos un ssid y lo guardamos en la base de datos
@@ -73,7 +73,7 @@ def lambda_handler(event , context):
                     exdate = str( today + timedelta(days=3))
                     exdate = exdate.split(' ')[0]
                     
-                    cur.execute("UPDATE UserTwitter SET failedAttempts=0 ,userSSID='" + ssid + "' , createSSID='" + str(today) + "' , expiratedSSID='" + exdate + "' WHERE userId ='" + str(userId) + "'");
+                    cur.execute("UPDATE users SET failedAttempts=0 ,userSSID='" + ssid + "' , createSSID='" + str(today) + "' , expiratedSSID='" + exdate + "' WHERE id ='" + str(userId) + "'");
                 
                 conn.commit();
                 cur.close();
@@ -82,7 +82,7 @@ def lambda_handler(event , context):
                 msg = "Password or UserName Incorrect"
 
                 # Si existe el usuario añadimos un intento fallido
-                detected = cur.execute("SELECT userId, failedAttempts, userBlocked FROM UserTwitter WHERE userName='" + user + "'");
+                detected = cur.execute("SELECT id, failedAttempts, blocked FROM users WHERE name='" + user + "'");
                 rows = cur.fetchall()
 
                 if detected != 0:
@@ -93,14 +93,14 @@ def lambda_handler(event , context):
                     if userBlocked == True:
                         msg = "The account is blocked"
                     elif failedAttempts < 2:
-                        cur.execute("UPDATE UserTwitter SET failedAttempts = failedAttempts + 1 WHERE userId='" + str(userId) + "'");
+                        cur.execute("UPDATE users SET failedAttempts = failedAttempts + 1 WHERE id='" + str(userId) + "'");
                         msg = "Password or UserName Incorrect. Failed Attempts: " + str(failedAttempts + 1)
                         conn.commit();
                     else:
                         # Si el usuario ha fallado 3 veces, bloqueamos la cuenta
                         msg = "Password or UserName Incorrect. Failed Attempts: " + str(failedAttempts + 1) + ". Account Blocked"
-                        cur.execute("UPDATE UserTwitter SET userBlocked = true WHERE userId ='" + str(userId) + "'");
-                        cur.execute("UPDATE UserTwitter SET failedAttempts=0 WHERE userID = '" + str(userId) + "'")
+                        cur.execute("UPDATE users SET blocked = true WHERE id ='" + str(userId) + "'");
+                        cur.execute("UPDATE users SET failedAttempts=0 WHERE id = '" + str(userId) + "'")
                         conn.commit();
             cur.close();
 

@@ -6,12 +6,13 @@ import json
 host = "3.211.29.216"
 username = "admin"
 password = "password"
-db = "Twitter"
+db = "twitter"
 
 def crearUsuario(cursor, userId, userName, userPassword, avatar):
     # crear el usuario
-    sql = "INSERT INTO UserTwitter (userId, userName, userPassword, failedAttempts, userBlocked, avatar) VALUES (%s, %s, %s, 0, false, %s)"
+    sql = "INSERT INTO users (id, name, password, failedAttempts, blocked, avatar) VALUES (%s, %s, %s, 0, false, %s)"
     cursor.execute(sql, (userId, userName, crypt.crypt(userPassword, 'salt'), avatar))
+
     # commit para guardar los cambios
     db.commit()
 
@@ -22,7 +23,7 @@ db = pymysql.connect(host=host, user=username, password=password, db=db, connect
 cursor = db.cursor()
 
 # vaciar la tabla UserTwitter
-cursor.execute("TRUNCATE TABLE UserTwitter")
+cursor.execute("TRUNCATE TABLE users")
 
 # rellenar la base de datos usando el método execute()
 

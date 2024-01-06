@@ -15,7 +15,7 @@ from urllib.parse import parse_qs
 rds_host = "3.211.29.216"
 username = "admin"
 password = "password"
-dbname = "Twitter"
+dbname = "twitter"
 
 def lambda_handler(event , context):
     
@@ -51,7 +51,7 @@ def lambda_handler(event , context):
                     # Comprobamos que el usuario no existe (si existe, no se puede registrar)
                     
                     with conn.cursor() as cur:
-                        cur.execute("SELECT * FROM UserTwitter WHERE userName = %s", (user))
+                        cur.execute("SELECT * FROM users WHERE name = %s", (user))
                         detect = cur.fetchone()
                         conn.commit()
                     
@@ -62,7 +62,7 @@ def lambda_handler(event , context):
                             # Creamos el usuario
                             
                             # Obtenemos la id del usuario
-                            cur.execute("SELECT MAX(userId) FROM UserTwitter")
+                            cur.execute("SELECT MAX(id) FROM users")
                             userId = cur.fetchone()[0] + 1
                             conn.commit()
                 
@@ -80,7 +80,7 @@ def lambda_handler(event , context):
                             expiratedSSID = expiratedSSID.split(' ')[0]
                 
                             # Creamos el usuario en la base de datos
-                            cur.execute("INSERT INTO UserTwitter(userId, userName, userPassword, avatar, failedAttempts, userBlocked, userSSID, createSSID, expiratedSSID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (userId, user, userPassword, "{}"  ,0 ,0 ,userSSID, createSSID, expiratedSSID))
+                            cur.execute("INSERT INTO users(id, name, password, avatar, failedAttempts, blocked, userSSID, createSSID, expiratedSSID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (userId, user, userPassword, "{}"  ,0 ,0 ,userSSID, createSSID, expiratedSSID))
                             conn.commit()
     
                             res = True

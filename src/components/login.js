@@ -5,21 +5,24 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import {Input} from "@nextui-org/react";
+import { useForm, SubmitHandler } from "react-hook-form"
 
 export default function Login() {
 
     const router = useRouter()
-	
-    const [user, setUser] = useState("")
-    const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-	
+    const {
+        register,
+        handleSubmit,
+	reset,
+        formState: { errors },
+      } = useForm();
+
+    const onSubmit = async (data) => {
 	const res = await signIn("credentials", {
-		username: user,
-		password: password,
+		username: data.name,
+		password: data.password,
 		callbackUrl: "/user",
 		redirect: false
 	})
@@ -30,7 +33,14 @@ export default function Login() {
 	}
 	else if(res.ok == false) {
 	    setError(res.error)
+	    reset()
 	}
+
+    };
+
+    const handleSubmite = async (e) => {
+        e.preventDefault();
+	
     }
 
     return (
@@ -38,8 +48,7 @@ export default function Login() {
             <div className="w-full flex flex-col gap-4 border border-white rounded-lg">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 
-		    {/* Error */}
-	    	    
+		    {/* Error */} 
 	    	    {error && (
 			<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
 			    <span className="block sm:inline">{error}</span>
@@ -52,14 +61,14 @@ export default function Login() {
                     </div>
 
                     {/* Formulario */}
-                    <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
 			
 
 			{/* Nombre */}    
-	    		<Input onChange={(e) => setUser(e.target.value)} type="text" label="Nombre" variant="underlined" required/>
+	    		<Input {...register("name", {required: true})} type="text" label="Nombre" variant="underlined" required/>
 
                         {/* Contraseña */}
-                        <Input onChange={(e) => setPassword(e.target.value)} type="password" label="Contraseña" variant="underlined" required/>
+                        <Input {...register("password", {required: true})} type="password" label="Contraseña" variant="underlined" required/>
 
 			{/* Crear cuenta */}
 			<div className="flex justify-between">

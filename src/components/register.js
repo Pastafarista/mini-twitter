@@ -5,40 +5,44 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import {Input} from "@nextui-org/react";
+import {useForm, SubmitHandler} from "react-hook-form";
 
 export default function Register() {
 
     const router = useRouter()
-	
-    const [user, setUser] = useState("")
-    const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-	
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-	
-	 const usuario = {
-	    user: user,
-	    passwordUser: password
-   	}	
+
+    const {
+	register,
+	handleSubmit,
+	reset,
+	formState: { errors },
+    } = useForm();
+   
+    const onSubmit = async (data) => {
+	    const usuario = {
+	    	user: data.name,
+	    	passwordUser: data.password
+   	    }	
 
 	const res = await fetch("https://taz8gpsg91.execute-api.us-east-1.amazonaws.com/default/register", {
 	    method: "POST",
 	    body: JSON.stringify(usuario)
 	})
 
-	const data = await res.json()
+	const resData = await res.json()
 
-	console.log(data)
+	console.log(resData)
 
-	if (data.res == true) {
+	if (resData.res == true) {
 	    setError("")
 	    router.push("/login")
 	}
 	else {
-	    setError(data.msg)
+	    setError(resData.msg)
+	    reset()
 	}
-    }
+   }
 
     return (
         <section>
@@ -58,13 +62,13 @@ export default function Register() {
                     </div>
 
                     {/* Formulario */}
-                    <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
 			
 			{/* Nombre */}
-                        <Input onChange={(e) => setUser(e.target.value)} type="text" label="Nombre" variant="underlined" required/>
+                        <Input {...register("name", {required: true})} type="text" label="Nombre" variant="underlined" required/>
 
                         {/* Contraseña */}
-                        <Input onChange={(e) => setPassword(e.target.value)} type="password" label="Contraseña" variant="underlined" required/>
+                        <Input {...register("password", {required:true})} type="password" label="Contraseña" variant="underlined" required/>
 
 			{/* Ya tengo una cuenta */}
 	    		<div className="flex justify-between">
