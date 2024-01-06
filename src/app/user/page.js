@@ -1,14 +1,26 @@
-import { getServerSession } from "next-auth/next"
+"use client"
 
-export default async function Page() {
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+
+export default function Component() {	
+
+ 	const { data, status } = useSession()
+	const router = useRouter()
+
+	if (status === "loading") {
+		return <div>Loading...</div>
+	}
+
+	if (status === "unauthenticated") {
+		router.push("/login")
+		return <div>Redirecting...</div>
+	}
+
 	return (
-		<>
-			<h1>Server side rendering</h1>
-			<p>
-				This page uses the universal <strong>getServerSideProps()</strong>{" "}
-				method, which gets session from the server.
-			</p>
-		</>
-	
+		<section>
+			<h1>Page</h1>
+		</section>
 	)
+
 }

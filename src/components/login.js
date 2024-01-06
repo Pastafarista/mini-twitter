@@ -28,7 +28,7 @@ export default function Login() {
 	    router.push("/user")
 	}
 	else if(res.ok == false) {
-	    setError("Usuario o contraseña incorrectos")
+	    setError(res.error)
 	}
     }
 
