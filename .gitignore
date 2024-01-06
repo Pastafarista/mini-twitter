@@ -9,3 +9,5 @@ termpdf.logs
 node_modules
 
 node_modules/*
+
+.next

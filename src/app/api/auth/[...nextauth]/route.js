@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-
-
 const authOptions = {
 	providers: [
 		CredentialsProvider({
@@ -46,7 +44,11 @@ const authOptions = {
 				}
 			}
 		})
-	]
+	],
+	pages: {
+		signIn: '/login',
+		error: '/login',
+	},
 }
 
 const handler = NextAuth(authOptions)

@@ -8,9 +8,10 @@ import { signIn } from 'next-auth/react'
 export default function Login() {
 
     const router = useRouter()
-
+	
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,10 +24,11 @@ export default function Login() {
 	})
 
 	if (res.ok == true) {
+	    setError("")
 	    router.push("/user")
 	}
 	else if(res.ok == false) {
-	    alert(res.error)
+	    setError("Usuario o contraseña incorrectos")
 	}
     }
 
@@ -34,6 +36,14 @@ export default function Login() {
         <section>
             <div className="w-full bg-blue rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  from-gray-900 to-gray-600 bg-gradient-to-r">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+
+		    {/* Error */}
+	    	    
+	    	    {error && (
+			<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+			    <span className="block sm:inline">{error}</span>
+			</div>
+		    )}
 
                     {/* Título */}
                     <div>
