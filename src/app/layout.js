@@ -5,8 +5,8 @@ import Navbar from "../components/navbar";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Comercios',
-  description: 'Buscar y registrar comercios',
+  title: 'Mini Twitter',
+  description: 'Mini Twitter',
 }
 
 export default function RootLayout({ children }) {

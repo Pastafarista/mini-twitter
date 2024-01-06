@@ -1,23 +1,14 @@
-"use client";
+import { getServerSession } from "next-auth/next"
 
-import { useSession } from "next-auth/react"
-
-
-export default function Component() {	
-	const { data: session, status } = useSession()
+export default async function Page() {
+	return (
+		<>
+			<h1>Server side rendering</h1>
+			<p>
+				This page uses the universal <strong>getServerSideProps()</strong>{" "}
+				method, which gets session from the server.
+			</p>
+		</>
 	
-	if (status === "loading") {
-   		 return <p>Loading...</p>
-  	}
-
-  	if (status === "unauthenticated") {
-    		return <p>Access Denied</p>
-  	}
-
-  	return (
-    		<>
-      			<h1>Protected Page</h1>
-      			<p>You can view this page because you are signed in.</p>
-    		</>
-  )
+	)
 }
