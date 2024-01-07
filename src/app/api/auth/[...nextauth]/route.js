@@ -31,7 +31,7 @@ export const authOptions = {
 
 				if(data.res){
 					const user = {
-						_id: data.userId,
+						id: data.userId,
           					name: data.user,
 						avatar: data.avatar,
 					}
