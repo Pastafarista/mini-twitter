@@ -20,6 +20,7 @@ import { HiEnvelope } from "react-icons/hi2";
 const NAVIGATION_ITEMS = [
   {
     title: "Twitter",
+    href: "/",
     icon: BsTwitter,
   },
   {
@@ -28,22 +29,27 @@ const NAVIGATION_ITEMS = [
   },
   {
     title: "Buscar",
+    href: "/search",
     icon: BiSearch,
   },
   {
     title: "Notifications",
+    href: "/notifications",
     icon: BsBell,
   },
   {
     title: "Messages",
+    href: "/messages",
     icon: BsEnvelope,
   },
   {
     title: "Bookmarks",
+    href: "/bookmarks",
     icon: BsBookmark,
   },
   {
     title: "Profile",
+    href: "/profile",
     icon: BiUser,
   },
 ];
@@ -76,7 +82,7 @@ const Sidebar = () => {
         {NAVIGATION_ITEMS.map((item) => (
           <Link
             className="hover:bg-white/10 text-2xl transition duration-200 flex items-center justify-start w-fit space-x-4 rounded-3xl py-2 px-6"
-            href={"/"}
+            href={item.href || "/"}
             key={item.title}
           >
             <div>
@@ -94,7 +100,7 @@ const Sidebar = () => {
 
       <button className="rounded-full flex items-center space-x-2 bg-transparent p-4 text-center hover:bg-white/10 transition duration-200 w-full justify-between">
         <div className="flex items-center space-x-2">
-          <div className="rounded-full bg-slate-400 w-10 h-10"></div>
+          <img src="https://firefoxusercontent.com/3b75b80275f2cba44c57f90118d5a056" className="rounded-full w-10 h-10"/>
           <div className="text-left text-sm">
             <div className="font-bold">
 	  	{name}

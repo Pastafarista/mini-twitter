@@ -60,7 +60,7 @@ export default function	Post(){
               <div class="w-12 flex items-top">
                 <img
                   class="inline-block h-10 w-10 rounded-full"
-                  src="https://pbs.twimg.com/profile_images/1308769664240160770/AfgzWVE7_normal.jpg"
+                  src="https://firefoxusercontent.com/3b75b80275f2cba44c57f90118d5a056"
                   alt=""
                 />
               </div>
