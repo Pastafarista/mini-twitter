@@ -97,7 +97,7 @@ const Sidebar = () => {
         <div className="flex items-center space-x-2">
           <div className="rounded-full bg-slate-400 w-10 h-10"></div>
           <div className="text-left text-sm">
-            <div className="font-semibold">
+            <div className="font-bold">
 	  	{name}
             </div>
             <div className="">@{name}</div>

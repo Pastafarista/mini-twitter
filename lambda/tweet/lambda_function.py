@@ -32,8 +32,7 @@ def lambda_handler(event , context):
 
     # Recogemos los datos del body
     body = eval(event["body"])
-    user = body["user"];
-    userId = body["userId"];
+    name = body["user"];
     tweet = body["tweet"];
     attachment = body["attachment"];
         
@@ -43,20 +42,27 @@ def lambda_handler(event , context):
 
         with conn.cursor() as cur:
             # Comprobamos si existe el usuario en la base de datos
-            detected = cur.execute("SELECT id FROM users WHERE id='" + userId + "'");
+            detected = cur.execute("SELECT id FROM users WHERE name='" + name + "'");
 
             if not detected:
                 res = False
                 msg = "El usuario no existe"
+            elif tweet == "":
+                res = False
+                msg = "El tweet esta vacio"
+            elif len(tweet) > 200:
+                res = False
+                msg = "El tweet execede los 200 caracteres"
+            
             else:
-
                 rows = cur.fetchall()
                 
+                userId = str(rows[0][0])
+                
                 # Si existe, creamos el tweet
-                userId = rows[0][0]
                 date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                    
-                if(not attachment):
+                if(attachment == ""):
                     cur.execute("INSERT INTO tweets (userId, tweet, date) VALUES ('" + userId + "', '" + tweet + "', '" + date + "')");
                 else:
                     cur.execute("INSERT INTO tweets (userId, tweet, date, attachment) VALUES ('" + userId + "', '" + tweet + "', '" + date + "', '" + attachment + "')");
@@ -67,7 +73,7 @@ def lambda_handler(event , context):
 
         cur.close();
 
-        except pymysql.MySQLError as e:    
+    except pymysql.MySQLError as e:    
         print(e)
     
     # Cerramos la conexión con la base de datos
@@ -79,3 +85,4 @@ def lambda_handler(event , context):
         'headers': { 'Access-Control-Allow-Origin' : '*' },
         'body' : json.dumps( { 'res':res , 'msg':msg })
     }
+
