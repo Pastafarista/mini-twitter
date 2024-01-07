@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Layout from '@/components/layout'
 
 export default function Component() {	
 	
@@ -18,8 +19,8 @@ export default function Component() {
 	}
 
 	return (
-		<div className="text-center">
-			<h1 className="text-xl"> Bienvenido {session.user.name}! </h1>
+		<div>
+			<Layout/>
 		</div>
 
 	)

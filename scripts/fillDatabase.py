@@ -23,7 +23,7 @@ db = pymysql.connect(host=host, user=username, password=password, db=db, connect
 cursor = db.cursor()
 
 # vaciar la tabla UserTwitter
-cursor.execute("TRUNCATE TABLE users")
+# cursor.execute("TRUNCATE TABLE users")
 
 # rellenar la base de datos usando el método execute()
 
