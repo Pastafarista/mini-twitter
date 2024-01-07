@@ -58,7 +58,7 @@ export default function Register() {
 
 	if (resData.res == true) {
 	    setError("")
-	    router.push("/login")
+	    router.push("/user")
 	}
 	else {
 	    reset()

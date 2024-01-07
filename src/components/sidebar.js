@@ -13,6 +13,7 @@ import {
   BsThreeDots,
 } from "react-icons/bs";
 
+import { BiSearch } from "react-icons/bi";
 import { HiOutlineHashtag } from "react-icons/hi";
 import { HiEnvelope } from "react-icons/hi2";
 
@@ -26,8 +27,8 @@ const NAVIGATION_ITEMS = [
     icon: BiHomeCircle,
   },
   {
-    title: "Explore",
-    icon: HiOutlineHashtag,
+    title: "Buscar",
+    icon: BiSearch,
   },
   {
     title: "Notifications",
@@ -47,9 +48,7 @@ const NAVIGATION_ITEMS = [
   },
 ];
 
-
-const Sidebar = () => {
- 
+const Sidebar = () => { 
 
   const router = useRouter();
 
