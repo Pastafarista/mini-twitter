@@ -32,17 +32,18 @@ def lambda_handler(event , context):
 
     # Recogemos los datos del body
     body = eval(event["body"])
-    name = body["user"];
-    tweet = body["tweet"];
-    attachment = body["attachment"];
-        
+    name = body["user"]
+    tweet = body["tweet"]
+    attachment = body["attachment"]
+    hasAttachment = body["hasAttachment"]
+
     try:
         # Conectamos con la base de datos
         conn = pymysql.connect(rds_host, user=username, passwd=password, db=dbname, connect_timeout=10, port=3306)
 
         with conn.cursor() as cur:
             # Comprobamos si existe el usuario en la base de datos
-            detected = cur.execute("SELECT id FROM users WHERE name='" + name + "'");
+            detected = cur.execute("SELECT id FROM users WHERE username='" + name + "'");
 
             if not detected:
                 res = False
@@ -52,8 +53,7 @@ def lambda_handler(event , context):
                 msg = "El tweet esta vacio"
             elif len(tweet) > 200:
                 res = False
-                msg = "El tweet execede los 200 caracteres"
-            
+                msg = "El tweet execede los 200 caracteres" 
             else:
                 rows = cur.fetchall()
                 
@@ -62,10 +62,10 @@ def lambda_handler(event , context):
                 # Si existe, creamos el tweet
                 date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                    
-                if(attachment == ""):
-                    cur.execute("INSERT INTO tweets (userId, tweet, date) VALUES ('" + userId + "', '" + tweet + "', '" + date + "')");
+                if(not hasAttachment):
+                    cur.execute("INSERT INTO tweets (userId, tweet, date, hasAttachment) VALUES ('" + userId + "', '" + tweet + "', '" + date + "', 0)");
                 else:
-                    cur.execute("INSERT INTO tweets (userId, tweet, date, attachment) VALUES ('" + userId + "', '" + tweet + "', '" + date + "', '" + attachment + "')");
+                    cur.execute("INSERT INTO tweets (userId, tweet, date, attachment, hasAttachment) VALUES ('" + userId + "', '" + tweet + "', '" + date + "', '" + attachment + "', 1)");
                 conn.commit();
 
                 res = True

@@ -28,7 +28,7 @@ def lambda_handler(event , context):
         with conn.cursor() as cur:
             
             # Obtenemos todos los tweets de la base de datos
-            cur.execute("SELECT id, userId, date, attachment, tweet FROM tweets")
+            cur.execute("SELECT id, userId, date, attachment, hasAttachment, tweet FROM tweets")
             tweets_lineas = cur.fetchall()
         
             # Creamos un array para guardar los tweets
@@ -41,18 +41,21 @@ def lambda_handler(event , context):
                 
                 # Obtenemos el nombre del usuario que ha escrito el tweet
                 userId = tweet[1]
-                cur.execute("SELECT name FROM users WHERE id = %s", (userId))
+                cur.execute("SELECT username FROM users WHERE id = %s", (userId))
                 author = cur.fetchone()[0]
 
                 date = tweet[2].strftime("%d/%m/%Y %H:%M:%S")
                 attachment = tweet[3]
+                hasAttachment = tweet[4]
                 tweet = tweet[4]
+
                 
                 tweet_object = {
                     'id': id,
                     'author': author,
                     'date': date,
                     'attachment': attachment,
+                    'hasAttachment': hasAttachment,
                     'tweet': tweet
                 }
 

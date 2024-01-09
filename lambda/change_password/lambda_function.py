@@ -39,7 +39,7 @@ def lambda_handler(event , context):
         conn = pymysql.connect(rds_host, user=username, passwd=password, db=dbname, connect_timeout=10, port=3306)
 
         with conn.cursor() as cur:
-            detected = cur.execute("select blocked from users where name ='" + user + "' and keyword='" + keyWord + "'");
+            detected = cur.execute("select blocked from users where username ='" + user + "' and keyword='" + keyWord + "'");
             rows = cur.fetchall()
             
             if detected != 0:
@@ -50,7 +50,7 @@ def lambda_handler(event , context):
                     msg = "La cuenta está bloqueada"
                 else:
                     newpassWordhash = crypt.crypt(newpassWord, 'salt')
-                    cur.execute("UPDATE users SET password ='" + newpassWordhash + "' WHERE name ='" + user + "'")
+                    cur.execute("UPDATE users SET password ='" + newpassWordhash + "' WHERE username ='" + user + "'")
                     conn.commit()
                     
                     res = True

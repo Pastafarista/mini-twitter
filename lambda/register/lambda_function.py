@@ -13,7 +13,7 @@ from urllib.parse import parse_qs
 
 # Información de la base de datos
 rds_host = "3.211.29.216"
-username = "admin"
+username_aws = "admin"
 password = "password"
 dbname = "twitter"
 
@@ -32,26 +32,31 @@ def lambda_handler(event , context):
             res = False
             msg = "Error: No se ha enviado el body"
         else:
-            keys = ["user", "passwordUser"]
+            keys = ["user", "username", "keyword", "passwordUser"]
         
             if(not all (key in body for key in keys)):
                 res = False
                 msg = "Faltan parametros para incializar al usuario"
             else:
                 # Obtenemos los parámetros
-                user = body["user"]
+                name = body["user"]
+                username = body["username"]
+                
+                keyword = body["keyword"]
+                    
                 passwordUser = body["passwordUser"]
-               
-                if(user == "" or passwordUser == ""):
+                avatar = body["avatar"]
+
+                if(username == "" or passwordUser == "" or name == ""):
                     res = False
                     msg = "Rellena todos los campos"
                 else:
-                    conn = pymysql.connect(rds_host, user=username, passwd=password, db=dbname, connect_timeout=10, port=3306)
+                    conn = pymysql.connect(rds_host, user=username_aws, passwd=password, db=dbname, connect_timeout=10, port=3306)
                 
                     # Comprobamos que el usuario no existe (si existe, no se puede registrar)
                     
                     with conn.cursor() as cur:
-                        cur.execute("SELECT * FROM users WHERE name = %s", (user))
+                        cur.execute("SELECT * FROM users WHERE username = %s", (username))
                         detect = cur.fetchone()
                         conn.commit()
                     
@@ -78,9 +83,10 @@ def lambda_handler(event , context):
                             # Generamos el expireSSID
                             expiratedSSID = str( createSSID + timedelta(days=3))
                             expiratedSSID = expiratedSSID.split(' ')[0]
-                
+                            
+                            
                             # Creamos el usuario en la base de datos
-                            cur.execute("INSERT INTO users(id, name, password, avatar, failedAttempts, blocked, userSSID, createSSID, expiratedSSID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (userId, user, userPassword, "{}"  ,0 ,0 ,userSSID, createSSID, expiratedSSID))
+                            cur.execute("INSERT INTO users(id, name, username, password, failedAttempts, blocked, userSSID, createSSID, expiratedSSID, keyword, avatar) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (userId, name, username, userPassword, 0 ,0, userSSID, createSSID, expiratedSSID, keyword, avatar))
                             conn.commit()
     
                             res = True
@@ -92,4 +98,5 @@ def lambda_handler(event , context):
         'headers': { 'Access-Control-Allow-Origin' : '*' },
         'body' : json.dumps( { 'res':res , 'msg':msg , 'userId':userId})
     }
+
 

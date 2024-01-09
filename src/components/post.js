@@ -5,29 +5,20 @@ import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import { tweetContext } from "./layout";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { useEffect, useState } from "react";
 import crypto from "crypto";
 
 export default function	Post(){
-	
-	console.log(process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID)
 
-	const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME
+	const bucketName = "imagenes-antonio-landin"
 	const s3 = new S3Client({
-		region: process.env.NEXT_PUBLIC_AWS_REGION,
+		region: 'us-east-1',
 		credentials: {
-			accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-			secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
-			sessionToken: process.env.NEXT_PUBLIC_AWS_SESSION_TOKEN,
+			accessKeyId: "ASIA4KPW5WOLPFK5FV7G",
+			secretAccessKey: "cEKvCzL6Q0odW+wRVxzv2mJAMLqGeOZ4ssa61qVk",
+			sessionToken: "FwoGZXIvYXdzEGwaDCP764vByc/Je1IpTCLAAXxDR3hC+8h1BOS8I378MpD/DZXz/PwzFEm+KCjs/nHqMOBWTHaVyRd2MaM4+XfetadvIaomxmh/4nme2fUM1H9Eig3W6jcgU+NE/P/NSg+Y9+DKXGs+dVg8+0BLZG/MjZWN1ib29rQKGRAas0uN3sF6+ZRLcFYc48tWx/eREGj653DS8K7cJc4b8bC4Ki7CY1/XShGBtXH7QkRqZ3a99qSZK1aWziaJf1r51DSzQsNAaxxor/KICFy71Frlx+IRfCjzqPasBjIt7v7huU0A15S2Q6VixRmWJISIs9h1u+5PzZLZCfdHZaoXYc1WUaN7n0Pe0rDk"
 		},
-	})
-
-	const uploadFile = async (file, fileName) => {
-		const command = new PutObjectCommand({
-			Bucket: bucketName,
-			Key: fileName,
-			Body: file,
-		})
-	}
+	})	
 
 	const {data: session, status} = useSession()
 	
@@ -38,7 +29,35 @@ export default function	Post(){
 
 	if (!session)
 		return <p className="text-white">No has iniciado sesión</p>
-	
+
+	const username = session.user.name
+	const [user, setUser] = useState([])
+	const [avatar, setAvatar] = useState(null)
+
+	useEffect(() => {
+		fetch(' https://sk83s1lepc.execute-api.us-east-1.amazonaws.com/default/get_user',
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				"username": username
+			})
+		})
+		.then(response => response.json())
+		.then(data => {
+			setUser(data)
+			console.log(data)
+
+			if(data.avatar == null){
+				setAvatar("https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png")
+			}
+			else{
+				setAvatar("https://imagenes-antonio-landin.s3.amazonaws.com/" + data.avatar)
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error)
+		})
+	}, [])
 	
 	{/* Control de errores */}
 	const schema = yup.object().shape({
@@ -84,9 +103,10 @@ export default function	Post(){
 	    }
 
 	    const tweet = {
-		user: session.user.name,
+		user: username,
 	    	tweet: data.tweet,
 		attachment: fileName,
+		hasAttachment: fileName != "" ? 1 : 0,
    	    }		
 
 	    console.log("Tweet: ", tweet)
@@ -104,21 +124,21 @@ export default function	Post(){
    	}
 
 	return(
-	<div class="border-b-[0.5px] border-gray-600 dark:border-dim-200 pb-4">
+	<div className="border-b-[0.5px] border-gray-600 dark:border-dim-200 pb-4">
 
 	    <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="flex flex-shrink-0 p-4 pb-0">
-              <div class="w-12 flex items-top">
+            <div className="flex flex-shrink-0 p-4 pb-0">
+              <div className="w-12 flex items-top">
                 <img
-                  class="inline-block h-10 w-10 rounded-full"
-                  src="https://firefoxusercontent.com/3b75b80275f2cba44c57f90118d5a056"
+                  className="inline-block h-10 w-10 rounded-full"
+                  src={avatar}
                   alt=""
                 />
               </div>
 
-              <div class="w-full p-2">
+              <div className="w-full p-2">
                 <textarea
-                  class="dark:text-white text-gray-900 placeholder-gray-400 w-full h-10 bg-transparent border-0 focus:outline-none resize-none"
+                  className="dark:text-white text-gray-900 placeholder-gray-400 w-full h-10 bg-transparent border-0 focus:outline-none resize-none"
                   placeholder="What's happening?"
 		  {...register("tweet")}
                 ></textarea>
@@ -126,13 +146,13 @@ export default function	Post(){
               </div>
             </div>
 
-            <div class="w-full flex items-top p-2 text-white pl-14">
+            <div className="w-full flex items-top p-2 text-white pl-14">
 
 	      {/* Botón de subir imágen */}
 		
-	      <label for="file-upload">
-              <p class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2">
-                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+	      <label >
+              <p className="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <g>
                     <path
                       d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"
@@ -142,15 +162,15 @@ export default function	Post(){
                 </svg>
               </p>
 
-		<input {...register("img")} id="file-upload" type="file" class="hidden" />
+		<input {...register("img")} id="file-upload" type="file" className="hidden" />
 
 	      </label>
 
               <a
                 href="#"
-                class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
+                className="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
               >
-                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <g>
                     <path
                       d="M19 10.5V8.8h-4.4v6.4h1.7v-2h2v-1.7h-2v-1H19zm-7.3-1.7h1.7v6.4h-1.7V8.8zm-3.6 1.6c.4 0 .9.2 1.2.5l1.2-1C9.9 9.2 9 8.8 8.1 8.8c-1.8 0-3.2 1.4-3.2 3.2s1.4 3.2 3.2 3.2c1 0 1.8-.4 2.4-1.1v-2.5H7.7v1.2h1.2v.6c-.2.1-.5.2-.8.2-.9 0-1.6-.7-1.6-1.6 0-.8.7-1.6 1.6-1.6z"
@@ -164,9 +184,9 @@ export default function	Post(){
 
               <a
                 href="#"
-                class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
+                className="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
               >
-                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <g>
                     <path
                       d="M20.222 9.16h-1.334c.015-.09.028-.182.028-.277V6.57c0-.98-.797-1.777-1.778-1.777H3.5V3.358c0-.414-.336-.75-.75-.75s-.75.336-.75.75V20.83c0 .415.336.75.75.75s.75-.335.75-.75v-1.434h10.556c.98 0 1.778-.797 1.778-1.777v-2.313c0-.095-.014-.187-.028-.278h4.417c.98 0 1.778-.798 1.778-1.778v-2.31c0-.983-.797-1.78-1.778-1.78zM17.14 6.293c.152 0 .277.124.277.277v2.31c0 .154-.125.28-.278.28H3.5V6.29h13.64zm-2.807 9.014v2.312c0 .153-.125.277-.278.277H3.5v-2.868h10.556c.153 0 .277.126.277.28zM20.5 13.25c0 .153-.125.277-.278.277H3.5V10.66h16.722c.153 0 .278.124.278.277v2.313z"
@@ -177,9 +197,9 @@ export default function	Post(){
 
               <a
                 href="#"
-                class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
+                className="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
               >
-                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <g>
                     <path
                       d="M12 22.75C6.072 22.75 1.25 17.928 1.25 12S6.072 1.25 12 1.25 22.75 6.072 22.75 12 17.928 22.75 12 22.75zm0-20C6.9 2.75 2.75 6.9 2.75 12S6.9 21.25 12 21.25s9.25-4.15 9.25-9.25S17.1 2.75 12 2.75z"
@@ -195,9 +215,9 @@ export default function	Post(){
 
               <a
                 href="#"
-                class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
+                className="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
               >
-                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                   <g>
                     <path d="M-37.9 18c-.1-.1-.1-.1-.1-.2.1 0 .1.1.1.2z"></path>
                     <path
@@ -213,8 +233,8 @@ export default function	Post(){
                 </svg>
               </a>
 
-              <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white rounded-full py-1 px-4 ml-auto mr-1">
-                <span class="font-bold text-sm">Tweet</span>
+              <button type="submit" className="bg-blue-400 hover:bg-blue-500 text-white rounded-full py-1 px-4 ml-auto mr-1">
+                <span className="font-bold text-sm">Tweet</span>
               </button>
 
             </div>

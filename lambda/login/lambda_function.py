@@ -35,7 +35,6 @@ def lambda_handler(event , context):
     userId="err"
     msg="err"
     res=True
-    avatar="err"
     blocked="err"
     
     # Recogemos los datos del body
@@ -52,13 +51,13 @@ def lambda_handler(event , context):
         with conn.cursor() as cur:
 
             # Comprobamos si existe el usuario en la base de datos
-            detected = cur.execute("select id, avatar, blocked from users where name ='" + user + "' and password='" + hashPasswordUser + "'");
+            detected = cur.execute("select id, blocked from users where username ='" + user + "' and password='" + hashPasswordUser + "'");
             rows = cur.fetchall()
             
             # Si existe, generamos un ssid y lo guardamos en la base de datos
             if detected != 0:
                 userId = rows[0][0]
-                blocked = rows[0][2]
+                blocked = rows[0][1]
                 
                 if(blocked == True):
                     res = False
@@ -66,7 +65,6 @@ def lambda_handler(event , context):
                 else:
                     res = True
                     msg = "Logged!"
-                    avatar = rows[0][1]
                     ssid = uuid.uuid4()
                     ssid = str(ssid)
                     today = date.today()
@@ -82,7 +80,7 @@ def lambda_handler(event , context):
                 msg = "Password or UserName Incorrect"
 
                 # Si existe el usuario añadimos un intento fallido
-                detected = cur.execute("SELECT id, failedAttempts, blocked FROM users WHERE name='" + user + "'");
+                detected = cur.execute("SELECT id, failedAttempts, blocked FROM users WHERE username='" + user + "'");
                 rows = cur.fetchall()
 
                 if detected != 0:
@@ -114,5 +112,5 @@ def lambda_handler(event , context):
     return {
         'statusCode': 200,
         'headers': { 'Access-Control-Allow-Origin' : '*' },
-        'body' : json.dumps( { 'res':res , 'msg':msg , 'user':user, 'ssid':ssid, 'userId':userId, 'userBlocked':blocked ,'avatar':avatar})
+        'body' : json.dumps( { 'res':res , 'msg':msg , 'user':user, 'ssid':ssid, 'userId':userId, 'userBlocked':blocked})
     }

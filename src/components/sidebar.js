@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BiHomeCircle, BiUser } from "react-icons/bi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
   BsBell,
@@ -75,6 +76,36 @@ const Sidebar = () => {
   }
 
   const name = session?.user?.name;
+	
+  const [user, setUser] = useState([])
+  const [avatar, setAvatar] = useState(null)
+	
+  useEffect(() => {
+		fetch(' https://sk83s1lepc.execute-api.us-east-1.amazonaws.com/default/get_user',
+		{
+			method: 'POST',
+			body: JSON.stringify({
+				"username": name
+			})
+		})
+		.then(response => response.json())
+		.then(data => {
+			setUser(data)
+			console.log(data)
+
+			if(data.avatar == null){
+				setAvatar("https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png")
+			}
+			else{
+				setAvatar("https://imagenes-antonio-landin.s3.amazonaws.com/" + data.avatar)
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error)
+		})
+	}, [])
+
+ 
 
   return (
     <section className="w-[23%] sticky top-0 xl:flex flex-col items-stretch h-screen hidden">
@@ -100,12 +131,12 @@ const Sidebar = () => {
 
       <button className="rounded-full flex items-center space-x-2 bg-transparent p-4 text-center hover:bg-white/10 transition duration-200 w-full justify-between">
         <div className="flex items-center space-x-2">
-          <img src="https://firefoxusercontent.com/3b75b80275f2cba44c57f90118d5a056" className="rounded-full w-10 h-10"/>
+          <img src={avatar} className="rounded-full w-10 h-10"/>
           <div className="text-left text-sm">
             <div className="font-bold">
-	  	{name}
+	  	{user.name}
             </div>
-            <div className="">@{name}</div>
+            <div className="">@{user.username}</div>
           </div>
         </div>
         <div>

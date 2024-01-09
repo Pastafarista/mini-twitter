@@ -8,14 +8,27 @@ import {Input} from "@nextui-org/react";
 import {useForm, SubmitHandler} from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import crypto from "crypto"
 
 export default function Register() {
 
     const router = useRouter()
     const [error, setError] = useState("")
 
+    const bucketName = "imagenes-antonio-landin"
+	const s3 = new S3Client({
+		region: 'us-east-1',
+		credentials: {
+			accessKeyId: "ASIA4KPW5WOLPFK5FV7G",
+			secretAccessKey: "cEKvCzL6Q0odW+wRVxzv2mJAMLqGeOZ4ssa61qVk",
+			sessionToken: "FwoGZXIvYXdzEGwaDCP764vByc/Je1IpTCLAAXxDR3hC+8h1BOS8I378MpD/DZXz/PwzFEm+KCjs/nHqMOBWTHaVyRd2MaM4+XfetadvIaomxmh/4nme2fUM1H9Eig3W6jcgU+NE/P/NSg+Y9+DKXGs+dVg8+0BLZG/MjZWN1ib29rQKGRAas0uN3sF6+ZRLcFYc48tWx/eREGj653DS8K7cJc4b8bC4Ki7CY1/XShGBtXH7QkRqZ3a99qSZK1aWziaJf1r51DSzQsNAaxxor/KICFy71Frlx+IRfCjzqPasBjIt7v7huU0A15S2Q6VixRmWJISIs9h1u+5PzZLZCfdHZaoXYc1WUaN7n0Pe0rDk"
+		},
+	})
+
     const schema = yup.object().shape({
 	name: yup.string().required("Ingrese su nombre"),
+	username: yup.string().required("Ingrese su nombre de usuario"),
 	password: yup.string()
 	    .required("Ingrese su contraseña")
 	    .min(4, "La contraseña debe tener al menos 4 caracteres")
@@ -38,10 +51,40 @@ export default function Register() {
     });
    
     const onSubmit = async (data) => {
+	   let fileName = null
+
+	    // Subir imagen a S3
+	    if(data.avatar[0] != undefined){
+		// Generar nombre de archivo
+		const ext = data.avatar[0].name.split(".").pop()
+		fileName = crypto.randomBytes(16).toString("hex") + "." + ext
+
+		// Subir imagen a S3
+		const file = data.avatar[0]
+		const buffer = Buffer.from(await file.arrayBuffer())
+
+		try {
+			const writeCommand = new PutObjectCommand({	
+				Bucket: bucketName,
+				Key: fileName,
+				Body: buffer,
+			})
+					
+			const res = await s3.send(writeCommand)
+		} catch (err) {
+			console.log(err)
+		}
+	    }
+
 	    const usuario = {
-	    	user: data.name,
-	    	passwordUser: data.password
-   	    }	
+	    	username: data.username,
+		user: data.name,
+		keyword: data.keyword,
+	    	passwordUser: data.password,
+		avatar: fileName
+   	    }
+
+	    console.log(usuario)
 
 	const res = await fetch("https://taz8gpsg91.execute-api.us-east-1.amazonaws.com/default/register", {
 	    method: "POST",
@@ -85,7 +128,11 @@ export default function Register() {
 			{/* Nombre */}
                         <Input {...register("name", {required: true})} type="text" label="Nombre" variant="underlined" required/>
 			<p className="text-red-500 text-xs">{errors.name?.message}</p>
-	    
+	    		
+			{/* Nombre de usuario */}
+	    		<Input {...register("username", {required:true})} type="text" label="Nombre de usuario" variant="underlined" required/>
+	    		<p className="text-red-500 text-xs">{errors.username?.message}</p>
+
                         {/* Contraseña */}
                         <Input {...register("password", {required:true})} type="password" label="Contraseña" variant="underlined" required/>
 			<p className="text-red-500 text-xs">{errors.password?.message}</p>		
@@ -97,6 +144,10 @@ export default function Register() {
 	    		{/* Palabra clave */}	
 	    		<Input {...register("keyword", {required:true})} type="password" label="Palabra clave" variant="underlined" required/>
 			<p className="text-red-500 text-xs">{errors.keyword?.message}</p>
+			
+			{/* Subir foto de perfil */}
+	    		<p className="text-white text-sm">Subir foto de perfil</p>
+	    		<Input {...register("avatar")} type="file" required/>
 
 			{/* Ya tengo una cuenta */}
 	    		<div className="flex justify-between">
