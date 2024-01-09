@@ -1,4 +1,7 @@
 #!/home/antonio/.venv/bin/python3.11 
+# Author: Antonio Cabrera y Alejandro Gómez
+# Description: Este script se encarga de rellenar la base de datos con los datos de los usuarios
+
 import pymysql
 import crypt
 import json

@@ -44,7 +44,7 @@ export default function Render({ tweet }) {
               <div class="flex my-3 mr-2 rounded-2xl border border-gray-600">
                 <img
                   class="rounded-2xl"
-                  src="https://pbs.twimg.com/media/EnTkhz-XYAEH2kY?format=jpg&name=small"
+                  src={"https://imagenes-antonio-landin.s3.amazonaws.com/" + tweet.attachment}
                   alt=""
                 />
               </div>

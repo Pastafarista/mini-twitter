@@ -4,8 +4,30 @@ import * as yup from 'yup';
 import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import { tweetContext } from "./layout";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import crypto from "crypto";
 
 export default function	Post(){
+	
+	console.log(process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID)
+
+	const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME
+	const s3 = new S3Client({
+		region: process.env.NEXT_PUBLIC_AWS_REGION,
+		credentials: {
+			accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+			secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+			sessionToken: process.env.NEXT_PUBLIC_AWS_SESSION_TOKEN,
+		},
+	})
+
+	const uploadFile = async (file, fileName) => {
+		const command = new PutObjectCommand({
+			Bucket: bucketName,
+			Key: fileName,
+			Body: file,
+		})
+	}
 
 	const {data: session, status} = useSession()
 	
@@ -35,12 +57,41 @@ export default function	Post(){
 		});
 
 	const onSubmit = async (data) => {
+	    console.log(data)
+
+	    let fileName = ""
+
+	    if(data.img[0] != undefined){
+		// Generar nombre de archivo
+		const ext = data.img[0].name.split(".").pop()
+		fileName = crypto.randomBytes(16).toString("hex") + "." + ext
+
+		// Subir imagen a S3
+		const file = data.img[0]
+		const buffer = Buffer.from(await file.arrayBuffer())
+
+		try {
+			const writeCommand = new PutObjectCommand({	
+				Bucket: bucketName,
+				Key: fileName,
+				Body: buffer,
+			})
+					
+			const res = await s3.send(writeCommand)
+		} catch (err) {
+			console.log(err)
+		}
+	    }
+
 	    const tweet = {
 		user: session.user.name,
 	    	tweet: data.tweet,
-		attachment: "",
+		attachment: fileName,
    	    }		
-		const res = await fetch("https://t0i0qd9f93.execute-api.us-east-1.amazonaws.com/default/tweet", {
+
+	    console.log("Tweet: ", tweet)
+
+	    const res = await fetch("https://t0i0qd9f93.execute-api.us-east-1.amazonaws.com/default/tweet", {
 		    method: "POST",
 		    body: JSON.stringify(tweet)
 		})
@@ -53,9 +104,9 @@ export default function	Post(){
    	}
 
 	return(
-		<div
-            class="border-b-[0.5px] border-gray-600 dark:border-dim-200 pb-4"
-          >
+	<div class="border-b-[0.5px] border-gray-600 dark:border-dim-200 pb-4">
+
+	    <form onSubmit={handleSubmit(onSubmit)}>
             <div class="flex flex-shrink-0 p-4 pb-0">
               <div class="w-12 flex items-top">
                 <img
@@ -76,10 +127,11 @@ export default function	Post(){
             </div>
 
             <div class="w-full flex items-top p-2 text-white pl-14">
-              <a
-                href="#"
-                class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2"
-              >
+
+	      {/* Botón de subir imágen */}
+		
+	      <label for="file-upload">
+              <p class="text-blue-400 hover:bg-blue-50 dark:hover:bg-dim-800 rounded-full p-2">
                 <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
                   <g>
                     <path
@@ -88,7 +140,11 @@ export default function	Post(){
                     <circle cx="8.868" cy="8.309" r="1.542"></circle>
                   </g>
                 </svg>
-              </a>
+              </p>
+
+		<input {...register("img")} id="file-upload" type="file" class="hidden" />
+
+	      </label>
 
               <a
                 href="#"
@@ -157,10 +213,12 @@ export default function	Post(){
                 </svg>
               </a>
 
-              <button onClick={handleSubmit(onSubmit)} class="bg-blue-400 hover:bg-blue-500 text-white rounded-full py-1 px-4 ml-auto mr-1">
+              <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white rounded-full py-1 px-4 ml-auto mr-1">
                 <span class="font-bold text-sm">Tweet</span>
               </button>
+
             </div>
+          </form>
           </div>
 	)
 }
