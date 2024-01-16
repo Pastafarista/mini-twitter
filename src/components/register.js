@@ -50,29 +50,29 @@ export default function Register() {
     });
    
     const onSubmit = async (data) => {
-	   let fileName = null
+	   let fileName = 'null'
 
 	    // Subir imagen a S3
 	    if(data.avatar[0] != undefined){
-		// Generar nombre de archivo
-		const ext = data.avatar[0].name.split(".").pop()
-		fileName = crypto.randomBytes(16).toString("hex") + "." + ext
-        
-		// Subir imagen a S3
-		const file = data.avatar[0]
-		const buffer = Buffer.from(await file.arrayBuffer())
+            // Generar nombre de archivo
+            const ext = data.avatar[0].name.split(".").pop()
+            fileName = crypto.randomBytes(16).toString("hex") + "." + ext
+            
+            // Subir imagen a S3
+            const file = data.avatar[0]
+            const buffer = Buffer.from(await file.arrayBuffer())
 
-		try {
-			const writeCommand = new PutObjectCommand({	
-				Bucket: bucketName,
-				Key: fileName,
-				Body: buffer,
-			})
-					
-			const res = await s3.send(writeCommand)
-		} catch (err) {
-			console.log(err)
-		}
+            try {
+                const writeCommand = new PutObjectCommand({	
+                    Bucket: bucketName,
+                    Key: fileName,
+                    Body: buffer,
+                })
+                        
+                const res = await s3.send(writeCommand)
+            } catch (err) {
+                console.log(err)
+            }
 	    }
 
 	    const usuario = {

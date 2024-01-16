@@ -1,15 +1,11 @@
 # Authors: Antonio Cabrera y Alejandro Gómez
 
-import sys
-import logging
 import pymysql
 import json
-import base64
 import uuid
 import crypt
 from datetime import date
 from datetime import timedelta
-from urllib.parse import parse_qs
 
 # Información de la base de datos
 rds_host = "3.211.29.216"
