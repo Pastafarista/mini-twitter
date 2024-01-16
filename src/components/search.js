@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 export default function Search () {
 	const [users, setUsers] = useState([]);
 	const [search, setSearch] = useState("");
+    const [onlyFollowers, setOnlyFollowers] = useState(0);
 
     const { data: session, status } = useSession();
 
@@ -19,15 +20,23 @@ export default function Search () {
 
     const username = session?.user?.name;
 
+    const searchObject = {
+        search: search,
+        user: username,
+        onlyFollowers: onlyFollowers,
+    }
+
 	useEffect( () => {
 		fetch("https://txwfwq05n9.execute-api.us-east-1.amazonaws.com/default/search", {
 			method: "POST",
-			body: JSON.stringify({
-				search: search
-			})
+			body: JSON.stringify(searchObject)
 		})
 		.then((res) => res.json())
-		.then((data) => {setUsers(data.users)})
+		.then((data) => {
+            if(data != null){
+                setUsers(data.usuarios)
+            }
+        })
 	}, [search])
 		
     function getAvatar(avatar){
@@ -69,6 +78,20 @@ export default function Search () {
 			    }} type="text" placeholder="Buscar" className="ml-2 bg-transparent text-white focus:outline-none w-full"/>
 			</div>
 			
+            <div className="mt-5 mx-5 flex items-center justify-center w-auto h-12 bg-[#161d26] rounded-full">
+                <input type="checkbox" className="ml-3" onChange={(e) => {
+                    if(e.target.checked){
+                        setOnlyFollowers(1)
+                        setSearch("")
+                    }
+                    else{
+                        setOnlyFollowers(0)
+                        setSearch(" ")
+                    }
+                }}/>
+            </div>
+            
+
             <div className="flex justify-start w-full h-full">
                 <div className="flex flex-col ml-10">   
                     {users.map((user) => (

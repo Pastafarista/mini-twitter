@@ -28,7 +28,7 @@ def lambda_handler(event , context):
             res = False
             msg = "Error: No se ha enviado el body"
         else:
-            keys = ["user", "username", "keyword", "passwordUser"]
+            keys = ["user", "username", "keyword", "passwordUser", "avatar"]
         
             if(not all (key in body for key in keys)):
                 res = False

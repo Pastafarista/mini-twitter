@@ -2,9 +2,6 @@
 
 import pymysql
 import json
-import uuid
-from datetime import date
-from datetime import timedelta
 
 # Información de la base de datos
 rds_host = "3.211.29.216"
@@ -16,124 +13,66 @@ def lambda_handler(event , context):
     
     if(event == None):
         return {
-            'statusCode': 200,
+            'statusCode': 400,
             'headers': { 'Access-Control-Allow-Origin' : '*' },
-            'body' : json.dumps("Error: No se ha enviado ningún evento")
+            'body' : "Error: No se ha enviado ningún evento"
         }
     
     body = eval(event["body"])
 
-    keys = ["user", "followUser"]
-    
-    if not all(key in body for key in keys):
+    keys = ["search", "onlyFollowers"]
+
+    if(not all (key in body for key in keys)):
         return {
             'statusCode': 200,
             'headers': { 'Access-Control-Allow-Origin' : '*' },
-            'body' : json.dumps("Error: No se han enviado todos los parámetros")
+            'body' : "Error: No se han enviado todos los parámetros"
         }
+   
+    # Recogemos los datos del body
+    user = body["search"];
+    onlyFollowers = body["onlyFollowers"];
 
-    user = body["user"]
-    followUser = body["followUser"]
-        
+    # Creamos un array para guardar los usuarios
+    usuarios = []
+
     try:
         # Conectamos con la base de datos
         conn = pymysql.connect(rds_host, user=username, passwd=password, db=dbname, connect_timeout=10, port=3306)
 
         with conn.cursor() as cur:
-                        
-            # Comprobamos si los usuarios existen y si están bloqueados
-
-            # Comprobamos si el usuario existe
-            sql = "SELECT COUNT(*) FROM users WHERE username = %s"
-
-            cur.execute(sql, (user))
-            res = cur.fetchone()[0]
-
-            if(res == 0):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario no existe")
-                }
-
-            # Comprobamos si el usuario está bloqueado
-            sql = "SELECT blocked FROM users WHERE username = %s"
-
-            cur.execute(sql, (user))
-            blocked = cur.fetchone()[0]
-
-            if(blocked == 1):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario está bloqueado")
-                }
-
-            # Comprobamos si el usuario al que se quiere seguir existe
-            sql = "SELECT COUNT(*) FROM users WHERE username = %s"
-            cur.execute(sql, (followUser))
-            res = cur.fetchone()[0]
-
-            if(res == 0):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario al que se quiere seguir no existe")
-                }
-
-            # Comprobamos si el usuario al que se quiere seguir está bloqueado
-            sql = "SELECT blocked FROM users WHERE username = %s"
-
-            cur.execute(sql, (followUser))
-
-            blocked = cur.fetchone()[0]
-
-            if(blocked == 1):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario al que se quiere seguir está bloqueado")
-                }
-
-            # Comprobamos si el usuario ya sigue al usuario al que se quiere seguir
+            
+            # obtener las ids 
             sql = "SELECT id FROM users WHERE username = %s"
             cur.execute(sql, (user))
-            userId = cur.fetchone()[0]
+            userId = cur.fetchone()
+            
+            if(onlyFollowers == False):
+                # Buscamos los usuarios que coincidan con el nombre de usuario
+                sql = "SELECT id, name, username, avatar FROM users WHERE username LIKE %s"
+                cur.execute(sql, ('%' + user + '%'))
+                res = cur.fetchall()
+            else:
+                # Buscamos los usuarios que coincidan con el nombre de usuario
+                sql = "SELECT id, name, username, avatar FROM users WHERE username LIKE %s AND id IN (SELECT userId FROM followers WHERE followerId = %s)"
+                cur.execute(sql, ('%' + user + '%', userId))
+                res = cur.fetchall()
 
-            cur.execute(sql, (followUser))
-            followedId = cur.fetchone()[0]
-
-            sql = "SELECT COUNT(*) FROM followers WHERE userId = %s AND followerId = %s"
-            cur.execute(sql, (userId, followedId))
-            res = cur.fetchone()[0]
-            if(res == 1):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario ya sigue al usuario al que se quiere seguir")
+            # Recorremos los usuarios
+            for row in res:
+                usuario = {
+                    'id': row[0],
+                    'name': row[1],
+                    'username':row[2],
+                    'avatar': row[3]
                 }
 
-            # comprobamos que el usuario no se siga a si mismo
-            if(userId == followedId):
-                return {
-                    'statusCode': 200,
-                    'headers': { 'Access-Control-Allow-Origin' : '*' },
-                    'body' : json.dumps("Error: El usuario no se puede seguir a si mismo")
-                }
+                usuarios.append(usuario) 
 
-            # Seguimos al usuario
-            sql = "INSERT INTO followers(userId, followerId) VALUES (%s, %s)"
-            cur.execute(sql, (userId, followedId))
-            conn.commit()
             cur.close();
+
     except pymysql.MySQLError as e:    
         print(e)
-
-        return {
-            'statusCode': 200,
-            'headers': { 'Access-Control-Allow-Origin' : '*' },
-            'body' : json.dumps("Error: No se ha podido seguir al usuario -> " + str(e))
-        }
     
     # Cerramos la conexión con la base de datos
     conn.close();
@@ -142,6 +81,6 @@ def lambda_handler(event , context):
     return {
         'statusCode': 200,
         'headers': { 'Access-Control-Allow-Origin' : '*' },
-        'body' : json.dumps("El usuario ahora sigue al usuario al que se quiere seguir")
+        'body' : json.dumps( { 'usuarios' : usuarios })
     }
 
