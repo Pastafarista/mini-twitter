@@ -19,9 +19,9 @@ export default function Register() {
 	const s3 = new S3Client({
 		region: 'us-east-1',
 		credentials: {
-			accessKeyId: "ASIA4KPW5WOLMBZYJU6H",
-			secretAccessKey: "MMNVzafMXLriwKITWVb/8TzAOYxin1mgA9u3FWTD",
-			sessionToken: "FwoGZXIvYXdzEAsaDARNjNv10yrX7aYfLCLAAcMMnDTpfb+RZ/9Ykvbz9DnRmStL6AI/1rKgzIIf2i24F6AXSol103RN6PEVC3UYFDd/m+mmWUHCh0GrPTdI+lj1mgULfrAvHqWo+ujxhcBrTaFzl/L75Yvw9f040m33EJlE2NusHFyPJ9xrvqaGyl0egdy1yfRdXYMVXebF+B+lKyq6Uc6JIh+6xhb5MioCAR0Z9u1bLdnx+wywpmWZPFUR/XyJnIhrm0bml7ht1vz4I5KmuBVGAyTy4qiuRaCDFSjaqJmtBjIt/QcSajMG2br00VBUJcby367qxhhLCj4vV0qa4/aKjma1+A1rC7VnZAjH0g3f"
+			accessKeyId: "ASIA4KPW5WOLH32BDNGP",
+			secretAccessKey: "mVXSnbsSjY5I00HGZ92c+PB7CgGNxS0AmEp0jyF/",
+			sessionToken: "FwoGZXIvYXdzEBEaDC/o1pLdJQX4STEo+CLAATMFhim3Z3IcNqbciGP+2AOnunw61J96OG14Sbhnusnp5C0n1F+lYfkUDfOVjIp2unDFtIymiTeVFT2on+a5UajiAQljKSLzr0UgSAFjix+b9XSTKfrA/Y3aja9vqljMoRrADQ9ekMFwGaHr9wGdkA+xxgW646RlB7MujOdN/PmYJAwcciEHnGWvwIuOqR35enLhyefuKlsVgzlTQ/VS/lB6Y9W6afHUfjERodwkvzJxbE4lm0wNKU7N+zeiafMIhSiDwpqtBjIt9aI3beTXRyq+A5mOaTsalj7H9sXbzKRAmcvo4ISnEooWc1noyEPvAh0hB6KT"
 		},
 	})
 
@@ -50,8 +50,11 @@ export default function Register() {
     });
    
     const onSubmit = async (data) => {
-	   let fileName = 'null'
 
+        console.log(data)
+
+	    let fileName = 'null'
+        
 	    // Subir imagen a S3
 	    if(data.avatar[0] != undefined){
             // Generar nombre de archivo
