@@ -15,8 +15,6 @@ import {
 } from "react-icons/bs";
 
 import { BiSearch } from "react-icons/bi";
-import { HiOutlineHashtag } from "react-icons/hi";
-import { HiEnvelope } from "react-icons/hi2";
 
 const NAVIGATION_ITEMS = [
   {

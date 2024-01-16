@@ -17,3 +17,4 @@ sudo mysql -D twitter -e "CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT PRI
 
 sudo mysql -D twitter -e "CREATE TABLE tweets (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, userId INT NOT NULL, tweet VARCHAR(280), attachment VARCHAR(50), hasAttachment BOOLEAN NOT NULL, date DATETIME NOT NULL, FOREIGN KEY (userId) REFERENCES users(id));"
 
+sudo mysql -D twitter -e "CREATE TABLE followers (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, userId INT NOT NULL, followerId INT NOT NULL, FOREIGN KEY (userId) REFERENCES users(id), FOREIGN KEY (followerId) REFERENCES users(id));"

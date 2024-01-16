@@ -14,9 +14,9 @@ export default function	Post(){
 	const s3 = new S3Client({
 		region: 'us-east-1',
 		credentials: {
-			accessKeyId: "ASIA4KPW5WOLPFK5FV7G",
-			secretAccessKey: "cEKvCzL6Q0odW+wRVxzv2mJAMLqGeOZ4ssa61qVk",
-			sessionToken: "FwoGZXIvYXdzEGwaDCP764vByc/Je1IpTCLAAXxDR3hC+8h1BOS8I378MpD/DZXz/PwzFEm+KCjs/nHqMOBWTHaVyRd2MaM4+XfetadvIaomxmh/4nme2fUM1H9Eig3W6jcgU+NE/P/NSg+Y9+DKXGs+dVg8+0BLZG/MjZWN1ib29rQKGRAas0uN3sF6+ZRLcFYc48tWx/eREGj653DS8K7cJc4b8bC4Ki7CY1/XShGBtXH7QkRqZ3a99qSZK1aWziaJf1r51DSzQsNAaxxor/KICFy71Frlx+IRfCjzqPasBjIt7v7huU0A15S2Q6VixRmWJISIs9h1u+5PzZLZCfdHZaoXYc1WUaN7n0Pe0rDk"
+			accessKeyId: "ASIA4KPW5WOLMBZYJU6H",
+			secretAccessKey: "MMNVzafMXLriwKITWVb/8TzAOYxin1mgA9u3FWTD",
+			sessionToken: "FwoGZXIvYXdzEAsaDARNjNv10yrX7aYfLCLAAcMMnDTpfb+RZ/9Ykvbz9DnRmStL6AI/1rKgzIIf2i24F6AXSol103RN6PEVC3UYFDd/m+mmWUHCh0GrPTdI+lj1mgULfrAvHqWo+ujxhcBrTaFzl/L75Yvw9f040m33EJlE2NusHFyPJ9xrvqaGyl0egdy1yfRdXYMVXebF+B+lKyq6Uc6JIh+6xhb5MioCAR0Z9u1bLdnx+wywpmWZPFUR/XyJnIhrm0bml7ht1vz4I5KmuBVGAyTy4qiuRaCDFSjaqJmtBjIt/QcSajMG2br00VBUJcby367qxhhLCj4vV0qa4/aKjma1+A1rC7VnZAjH0g3f"
 		},
 	})	
 
